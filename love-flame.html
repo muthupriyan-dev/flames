@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLAMES Calculator</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+    background: linear-gradient(180deg, #fff5f8 0%, #ffeef3 100%);
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px 60px;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .heart-icon {
+    font-size: 48px;
+    display: inline-block;
+    animation: floatHeart 2.6s ease-in-out infinite;
+  }
+
+  @keyframes floatHeart {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(-4deg); }
+  }
+
+  .title {
+    color: #ff5c8a;
+    font-weight: 800;
+    font-size: 28px;
+    margin: 6px 0 0;
+    letter-spacing: 0.5px;
+  }
+
+  label {
+    display: block;
+    color: #ff5c8a;
+    font-weight: 700;
+    font-size: 15px;
+    margin: 18px 0 8px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #ffb3c9;
+    border-radius: 14px;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    color: #444;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input[type="text"]:focus {
+    border-color: #ff5c8a;
+    box-shadow: 0 0 0 4px rgba(255, 92, 138, 0.12);
+  }
+
+  .calc-btn {
+    display: block;
+    margin: 26px auto 0;
+    padding: 12px 36px;
+    background: #fff;
+    border: 2px solid #ff5c8a;
+    color: #ff5c8a;
+    font-weight: 800;
+    font-size: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.12s, background 0.2s, color 0.2s;
+  }
+
+  .calc-btn:active {
+    transform: scale(0.96);
+  }
+
+  .calc-btn:hover {
+    background: #ff5c8a;
+    color: #fff;
+  }
+
+  .result-label {
+    text-align: center;
+    color: #ff5c8a;
+    font-weight: 800;
+    font-size: 24px;
+    margin: 30px 0 14px;
+  }
+
+  .result-card {
+    border: 2px solid #ffb3c9;
+    border-radius: 18px;
+    padding: 28px 20px;
+    text-align: center;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    transition: border-color 0.3s;
+  }
+
+  .result-emoji {
+    font-size: 64px;
+    margin-bottom: 10px;
+    animation: pop 0.4s ease;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0.4); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .result-word {
+    font-size: 28px;
+    font-weight: 800;
+    color: #ff5c8a;
+  }
+
+  .result-sub {
+    font-size: 13px;
+    color: #999;
+    margin-top: 6px;
+  }
+
+  .placeholder {
+    color: #ccc;
+    font-size: 15px;
+  }
+
+  .elimination {
+    margin-top: 16px;
+    font-size: 12px;
+    color: #aaa;
+    word-break: break-word;
+    line-height: 1.5;
+  }
+
+  .error {
+    color: #ff5c8a;
+    font-size: 13px;
+    text-align: center;
+    margin-top: 6px;
+    min-height: 16px;
+  }
+
+  .footer {
+    margin-top: 36px;
+    text-align: center;
+  }
+
+  .footer-made-by {
+    font-size: 12px;
+    color: #bbb;
+    margin-bottom: 10px;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .footer-links a {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #ff5c8a;
+    text-decoration: none;
+    border: 1.5px solid #ffd1de;
+    border-radius: 50%;
+    background: #fff;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+  }
+
+  .footer-links a:active {
+    transform: scale(0.92);
+  }
+
+  .footer-links a:hover {
+    background: #ff5c8a;
+    color: #fff;
+    border-color: #ff5c8a;
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <span class="heart-icon">💗</span>
+      <h1 class="title">FLAMES</h1>
+    </div>
+
+    <label for="name1">Your Name :</label>
+    <input type="text" id="name1" placeholder="Enter your name" autocomplete="off">
+
+    <label for="name2">Your Crush Name :</label>
+    <input type="text" id="name2" placeholder="Enter their name" autocomplete="off">
+
+    <div class="error" id="error"></div>
+
+    <button class="calc-btn" id="calcBtn">Calculate</button>
+
+    <div class="result-label">Result :</div>
+    <div class="result-card" id="resultCard">
+      <span class="placeholder" id="placeholder">Fill both names and tap Calculate</span>
+    </div>
+
+    <div class="footer">
+      <div class="footer-links">
+        <a href="https://www.instagram.com/itz.muthuu?igsh=MXZiNGhqNmpoNGU1bw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+        <a href="https://github.com/muthupriyan-dev" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.49 2.87 8.3 6.84 9.64.5.1.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.61-3.37-1.21-3.37-1.21-.46-1.17-1.11-1.48-1.11-1.48-.91-.63.07-.62.07-.62 1 .07 1.53 1.04 1.53 1.04.89 1.55 2.34 1.1 2.91.84.09-.65.34-1.1.62-1.36-2.22-.26-4.56-1.12-4.56-4.98 0-1.1.39-2 1.03-2.7-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.04a9.4 9.4 0 0 1 5 0c1.91-1.31 2.75-1.04 2.75-1.04.55 1.42.2 2.47.1 2.73.64.7 1.03 1.6 1.03 2.7 0 3.87-2.35 4.72-4.58 4.97.36.32.67.94.67 1.9 0 1.37-.01 2.48-.01 2.81 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/>
+          </svg>
+        </a>
+        <a href="mailto:smuthupriyan020108@gmail.com" aria-label="Email">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="4" width="20" height="16" rx="3"/>
+            <path d="M3 6.5l9 6.5 9-6.5"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const FLAMES = [
+    { letter: 'F', word: 'Friends', emoji: '🤝' },
+    { letter: 'L', word: 'Love', emoji: '❤️' },
+    { letter: 'A', word: 'Affection', emoji: '🥰' },
+    { letter: 'M', word: 'Marriage', emoji: '💍' },
+    { letter: 'E', word: 'Enemy', emoji: '😈' },
+    { letter: 'S', word: 'Siblings', emoji: '👫' }
+  ];
+
+  const name1Input = document.getElementById('name1');
+  const name2Input = document.getElementById('name2');
+  const errorEl = document.getElementById('error');
+  const resultCard = document.getElementById('resultCard');
+  const calcBtn = document.getElementById('calcBtn');
+
+  function clean(str) {
+    return str.toLowerCase().replace(/[^a-z]/g, '');
+  }
+
+  function computeFlames(n1, n2) {
+    let a = clean(n1).split('');
+    let b = clean(n2).split('');
+
+    // Cancel one occurrence of each common letter
+    for (let i = 0; i < a.length; i++) {
+      const idx = b.indexOf(a[i]);
+      if (idx !== -1) {
+        a.splice(i, 1);
+        b.splice(idx, 1);
+        i--;
+      }
+    }
+
+    const count = a.length + b.length;
+    if (count === 0) return null;
+
+    // Circular elimination, like the classic FLAMES game
+    let letters = FLAMES.map(f => f.letter);
+    let pos = 0;
+    while (letters.length > 1) {
+      pos = (pos + count - 1) % letters.length;
+      letters.splice(pos, 1);
+      if (pos >= letters.length) pos = 0;
+    }
+
+    return FLAMES.find(f => f.letter === letters[0]);
+  }
+
+  function showPlaceholder(msg) {
+    resultCard.innerHTML = `<span class="placeholder">${msg}</span>`;
+  }
+
+  function showResult(res) {
+    resultCard.innerHTML = `
+      <div class="result-emoji">${res.emoji}</div>
+      <div class="result-word">${res.word}</div>
+      <div class="result-sub">${res.letter} from F · L · A · M · E · S</div>
+    `;
+  }
+
+  calcBtn.addEventListener('click', () => {
+    errorEl.textContent = '';
+    const n1 = name1Input.value.trim();
+    const n2 = name2Input.value.trim();
+
+    if (!n1 || !n2) {
+      errorEl.textContent = 'Enter both names to calculate';
+      showPlaceholder('Fill both names and tap Calculate');
+      return;
+    }
+
+    const res = computeFlames(n1, n2);
+    if (!res) {
+      errorEl.textContent = 'Names cancel out completely — try different names';
+      showPlaceholder('No result this time');
+      return;
+    }
+
+    showResult(res);
+  });
+
+  [name1Input, name2Input].forEach(inp => {
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') calcBtn.click();
+    });
+  });
+</script>
+</body>
+</html>
