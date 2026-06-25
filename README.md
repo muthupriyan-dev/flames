@@ -19,7 +19,6 @@ https://muthupriyan-dev.github.io/flames/flames.html
 
 ## 📷 Screenshots
 
-### Home Screen
 ![Home Screen](home.png)
 
 
