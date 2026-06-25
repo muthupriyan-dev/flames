@@ -24,3 +24,4 @@ https://muthupriyan-dev.github.io/flames/flames.html
 
 ## 👨‍💻 Author
 Muthupriyan
+GitHub: https://github.com/muthupriyan-dev
